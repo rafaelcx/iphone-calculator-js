@@ -5,6 +5,8 @@
 let valueStrInMemory = null;
 let operatorInMemory = null;
 
+let valueFontSize = 130;
+
 const hourEl = document.querySelector('.hour');
 const minuteEl = document.querySelector('.minute');
 const valueEl = document.querySelector('.value');
@@ -50,6 +52,18 @@ const setStrAsValue = (valueStr) => {
     }
 
     const [wholeNumStr, decimalStr] = valueStr.split('.');
+
+    let valueCharSize;
+    if (decimalStr) {
+        valueCharSize = wholeNumStr.length + decimalStr.length + 1;
+    } else {
+        valueCharSize = wholeNumStr.length;
+
+    }
+
+    valueFontSize -= (valueCharSize * 5.7);
+    valueEl.style.fontSize = valueFontSize.toString() + 'px';
+    valueFontSize = 130;
 
     decimalStr
         ? valueEl.textContent = parseFloat(wholeNumStr).toLocaleString() + '.' + decimalStr
@@ -101,6 +115,7 @@ const handleNumberClick = (numStr) => {
 // ========================================================================
 
 acEl.addEventListener('click', () => {
+    valueFontSize = 130;
     setStrAsValue('0');
     valueStrInMemory = null;
     operatorInMemory = null;
@@ -124,18 +139,22 @@ pmEl.addEventListener('click', () => {
 // ========================================================================
 
 additionEl.addEventListener('click', () => {
+    valueFontSize = 130;
     handleOperatorClick('addition');
 });
 
 subtractionEl.addEventListener('click', () => {
+    valueFontSize = 130;
     handleOperatorClick('subtraction');
 });
 
 multiplicationEl.addEventListener('click', () => {
+    valueFontSize = 130;
     handleOperatorClick('multiplication');
 });
 
 divisionEl.addEventListener('click', () => {
+    valueFontSize = 130;
     handleOperatorClick('division');
 });
 
@@ -154,9 +173,11 @@ equalEl.addEventListener('click', () => {
 percentEl.addEventListener('click', () => {
     const currentValueNumber = getValueAsNum();
     const newValueNum = currentValueNumber / 100;
+    valueFontSize = 130;
     setStrAsValue(newValueNum.toString());
     valueStrInMemory = null;
     operatorInMemory = null;
+
 });
 
 for (let i = 0; i < numberElArray.length; i++) {
