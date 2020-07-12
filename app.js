@@ -1,4 +1,10 @@
-// DOM Elements
+// ========================================================================
+// DOM elements
+// ========================================================================
+
+let valueStrInMemory = null;
+let operatorInMemory = null;
+
 const hourEl = document.querySelector('.hour');
 const minuteEl = document.querySelector('.minute');
 const valueEl = document.querySelector('.value');
@@ -44,11 +50,43 @@ const setStrAsValue = (valueStr) => {
     }
 
     const [wholeNumStr, decimalStr] = valueStr.split('.');
-    if (decimalStr) {
-        valueEl.textContent = parseFloat(wholeNumStr).toLocaleString() + '.' + decimalStr;
-    } else {
-        valueEl.textContent = parseFloat(valueStr).toLocaleString();
+
+    decimalStr
+        ? valueEl.textContent = parseFloat(wholeNumStr).toLocaleString() + '.' + decimalStr
+        : valueEl.textContent = parseFloat(valueStr).toLocaleString();
+};
+
+const getResultOfOperationAsStr = () => {
+    const currentValueNum = getValueAsNum();
+    const valueNumInMemory = parseFloat(valueStrInMemory);
+    let newValueNum;
+
+    if (operatorInMemory === 'addition') {
+        newValueNum = valueNumInMemory + currentValueNum;
+    } else if (operatorInMemory === 'subtraction') {
+        newValueNum = valueNumInMemory - currentValueNum;
+    } else if (operatorInMemory === 'multiplication') {
+        newValueNum = valueNumInMemory * currentValueNum;
+    } else if (operatorInMemory === 'division') {
+        newValueNum = valueNumInMemory / currentValueNum;
     }
+
+    return newValueNum.toString();
+};
+
+const handleOperatorClick = (operation) => {
+    const currentValueStr = getValueAsStr();
+
+    if (!valueStrInMemory) {
+        valueStrInMemory = currentValueStr;
+        operatorInMemory = operation;
+        setStrAsValue('0');
+        return;
+    }
+
+    valueStrInMemory = getResultOfOperationAsStr();
+    operatorInMemory = operation;
+    setStrAsValue('0');
 };
 
 const handleNumberClick = (numStr) => {
@@ -59,11 +97,13 @@ const handleNumberClick = (numStr) => {
 }
 
 // ========================================================================
-// Event listeners to numbers and decimal
+// Event listeners to functions
 // ========================================================================
 
 acEl.addEventListener('click', () => {
     setStrAsValue('0');
+    valueStrInMemory = null;
+    operatorInMemory = null;
 });
 
 pmEl.addEventListener('click', () => {
@@ -79,10 +119,44 @@ pmEl.addEventListener('click', () => {
         : setStrAsValue(currentValueStr.substring(1));
 });
 
+// ========================================================================
+// Event listeners to operations
+// ========================================================================
+
+additionEl.addEventListener('click', () => {
+    handleOperatorClick('addition');
+});
+
+subtractionEl.addEventListener('click', () => {
+    handleOperatorClick('subtraction');
+});
+
+multiplicationEl.addEventListener('click', () => {
+    handleOperatorClick('multiplication');
+});
+
+divisionEl.addEventListener('click', () => {
+    handleOperatorClick('division');
+});
+
+equalEl.addEventListener('click', () => {
+    if (valueStrInMemory) {
+        setStrAsValue(getResultOfOperationAsStr())
+        valueStrInMemory = null;
+        operatorInMemory = null;
+    }
+});
+
+// ========================================================================
+// Event listeners to numbers and decimal
+// ========================================================================
+
 percentEl.addEventListener('click', () => {
     const currentValueNumber = getValueAsNum();
     const newValueNum = currentValueNumber / 100;
     setStrAsValue(newValueNum.toString());
+    valueStrInMemory = null;
+    operatorInMemory = null;
 });
 
 for (let i = 0; i < numberElArray.length; i++) {
