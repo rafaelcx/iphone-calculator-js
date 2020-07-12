@@ -62,6 +62,29 @@ const handleNumberClick = (numStr) => {
 // Event listeners to numbers and decimal
 // ========================================================================
 
+acEl.addEventListener('click', () => {
+    setStrAsValue('0');
+});
+
+pmEl.addEventListener('click', () => {
+    const currentValueNum = getValueAsNum();
+    const currentValueStr = getValueAsStr();
+
+    if (currentValueNum === 0) {
+        return;
+    }
+
+    currentValueNum > 0
+        ? setStrAsValue('-' + currentValueStr)
+        : setStrAsValue(currentValueStr.substring(1));
+});
+
+percentEl.addEventListener('click', () => {
+    const currentValueNumber = getValueAsNum();
+    const newValueNum = currentValueNumber / 100;
+    setStrAsValue(newValueNum.toString());
+});
+
 for (let i = 0; i < numberElArray.length; i++) {
     const numberEl = numberElArray[i];
     numberEl.addEventListener('click', () => {
